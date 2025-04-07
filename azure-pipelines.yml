@@ -1,0 +1,23 @@
+# naho_quiz4_ci_dotnet.yml
+trigger:
+- main
+
+pool:
+  name: Default  
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.402'   
+
+- script: dotnet build
+  displayName: 'Build the .NET App'
+
+- script: dotnet publish -o $(Build.ArtifactStagingDirectory)
+  displayName: 'Publish Artifacts'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
